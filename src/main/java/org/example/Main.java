@@ -10,7 +10,7 @@ import org.example.renderer.RendererInterface;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
         RendererInterface render = new CliRendererImpl();
         InitWorld initWorld = new InitWorld();
         PathFinder pathFinder = new BFSFinder();

@@ -20,7 +20,29 @@ abstract public class Creature extends Entity {
         this.speed = speed;
     }
 
-    public abstract void makeMove(GameMap gameMap, PathFinder pathFinder);
+    // TODO ocp princip
+    public abstract Class<? extends Entity> getTargetClass();
+
+    public void makeMove(GameMap gameMap, PathFinder pathFinder) {
+        Optional<Coordinates> currentPosition = gameMap.getCoordinates(this);
+        if (currentPosition.isEmpty()) return;
+
+        List<Coordinates> listCoordinatesToTarget = pathFinder.findPath(
+                gameMap,
+                currentPosition.get(),
+                this.getTargetClass()
+        );
+
+        if (listCoordinatesToTarget.isEmpty()) return;
+
+        if (listCoordinatesToTarget.size() == 1) {
+            this.attack(gameMap, listCoordinatesToTarget.get(0));
+            return;
+        }
+        moveTowardsTarget(gameMap, listCoordinatesToTarget, currentPosition.get());
+    }
+
+    public abstract void attack(GameMap gameMap, Coordinates targetCoordinates);
 
     public void takeDamage(int damage) {
         int newHealthValue = Math.max(0, health.value() - damage);
@@ -29,5 +51,14 @@ abstract public class Creature extends Entity {
 
     public boolean isDead() {
         return health.value() <= 0;
+    }
+
+    private void moveTowardsTarget(GameMap gameMap, List<Coordinates> listCoordinatesToTarget, Coordinates currentPosition) {
+        int stepsToMove = Math.min(speed.value(), listCoordinatesToTarget.size() - 1);
+        Coordinates newPosition = listCoordinatesToTarget.get(stepsToMove - 1);
+        if (gameMap.isCellEmpty(newPosition) && gameMap.isCoordinatesInBounds(newPosition)) {
+            gameMap.removeEntity(currentPosition);
+            gameMap.addEntity(newPosition, this);
+        }
     }
 }

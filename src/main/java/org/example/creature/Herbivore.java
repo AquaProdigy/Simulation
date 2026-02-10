@@ -1,5 +1,6 @@
 package org.example.creature;
 
+import org.example.entity.Entity;
 import org.example.entity.Grass;
 import org.example.map.GameMap;
 import org.example.pathfinder.PathFinder;
@@ -17,31 +18,15 @@ public class Herbivore extends Creature {
     }
 
     @Override
-    public void makeMove(GameMap gameMap, PathFinder pathFinder) {
-        Optional<Coordinates> coordinatesThisEntity = gameMap.getCoordinates(this);
-        if (coordinatesThisEntity.isEmpty()) return;
-
-        List<Coordinates> listCoordinatesToTarget = pathFinder.findPath(
-                gameMap,
-                coordinatesThisEntity.get(),
-                Grass.class
-        );
-
-        if (listCoordinatesToTarget.isEmpty()) return;
-
-        if (listCoordinatesToTarget.size() == 1) {
-            gameMap.removeEntity(listCoordinatesToTarget.get(0));
-            gameMap.moveEntity(coordinatesThisEntity.get(), listCoordinatesToTarget.get(0));
-            return;
-        }
-
-        int stepsToMove = Math.min(speed.value(), listCoordinatesToTarget.size());
-        Coordinates newPosition = listCoordinatesToTarget.get(stepsToMove - 1);
-        gameMap.moveEntity(coordinatesThisEntity.get(), newPosition);
+    public Class<? extends Entity> getTargetClass() {
+        return Grass.class;
     }
 
     @Override
-    public String getSymbol() {
-        return "\uD83D\uDC04";
+    public void attack(GameMap gameMap, Coordinates targetCoordinates) {
+        Optional<Entity> targetEntity = gameMap.getEntity(targetCoordinates);
+        if (targetEntity.isEmpty()) return;
+        if (!this.getTargetClass().equals(targetEntity.get().getClass())) return;
+        gameMap.removeEntity(targetCoordinates);
     }
 }

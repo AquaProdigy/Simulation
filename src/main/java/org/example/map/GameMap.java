@@ -31,19 +31,6 @@ public class GameMap {
         entities.remove(coordinates);
     }
 
-    public void moveEntity(Coordinates from, Coordinates to) {
-        Optional<Entity> entity = getEntity(from);
-
-        if (entity.isEmpty()) {
-            throw new IllegalStateException("Entity not found");
-        }
-
-        removeEntity(from);
-        addEntity(to, entity.get());
-
-
-    }
-
     public boolean isCellEmpty(Coordinates coordinates) {
         return !entities.containsKey(coordinates);
     }
@@ -59,10 +46,6 @@ public class GameMap {
                 .findFirst();
     }
 
-    public boolean isContainsEntity(Coordinates coordinates) {
-        return entities.containsKey(coordinates);
-    }
-
     public Map<Coordinates, Creature> getAllCreatures() {
         return Map.copyOf(getEntitiesByType(Creature.class));
     }
@@ -72,6 +55,14 @@ public class GameMap {
                 coordinates.x() >= 0 && coordinates.x() < height;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     private <T extends Entity> Map<Coordinates, T> getEntitiesByType(Class<T> type) {
         return Map.copyOf(entities.entrySet().stream()
                 .filter(entry -> type.isInstance(entry.getValue()))
@@ -79,13 +70,5 @@ public class GameMap {
                         Map.Entry::getKey,
                         entry -> type.cast(entry.getValue())
                 )));
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 }

@@ -17,86 +17,87 @@ import java.util.List;
 import java.util.Random;
 
 public class InitWorld implements Actions {
+    final Integer MAX_HEALTH_HERBIVORE = 80;
+    final Integer MIN_HEALTH_HERBIVORE = 20;
+    final Integer MAX_SPEED_HERBIVORE = 2;
+    final Integer MIN_SPEED_HERBIVORE = 1;
+    final Integer MAX_POWER_PREDATOR = 25;
+    final Integer MIN_POWER_PREDATOR = 15;
+
     private final Random random = new Random();
-
-    // Параметры существ
-    private static final int PREDATOR_MIN_HEALTH = 80;
-    private static final int PREDATOR_MAX_HEALTH = 120;
-    private static final int PREDATOR_MIN_SPEED = 1;
-    private static final int PREDATOR_MAX_SPEED = 3;
-    private static final int PREDATOR_MIN_ATTACK = 15;
-    private static final int PREDATOR_MAX_ATTACK = 30;
-
-    private static final int HERBIVORE_MIN_HEALTH = 40;
-    private static final int HERBIVORE_MAX_HEALTH = 80;
-    private static final int HERBIVORE_MIN_SPEED = 1;
-    private static final int HERBIVORE_MAX_SPEED = 2;
 
     @Override
     public void execute(GameMap map) {
-        int width = map.getWidth();
         int height = map.getHeight();
-        int totalCells = width * height;
+        int width = map.getWidth();
+        int countCellMap = height * width;
 
-        int occupiedCells = (int) (totalCells * 0.6);
+        // 50% map is empty
+        int countCellForSpawn = countCellMap / 2;
+        //count entity in % for each
+        int countGrass = (int) countCellForSpawn * 25 / 100;
+        int countRock = (int) countCellForSpawn * 25 / 100;
+        int countTree = (int) countCellForSpawn * 25 / 100;
+        int countHerbivore = (int) countCellForSpawn * 20 / 100;
+        int countPredator = (int) countCellForSpawn * 5 / 100;
 
-        int predatorCount  = (int) (occupiedCells * 0.05);
-        int herbivoreCount = (int) (occupiedCells * 0.15);
-        int grassCount     = (int) (occupiedCells * 0.40);
-        int rockCount      = (int) (occupiedCells * 0.20);
 
-        int treeCount = occupiedCells
-                - predatorCount
-                - herbivoreCount
-                - grassCount
-                - rockCount;
+        spawnGrass(countGrass, map);
+        spawnRock(countRock, map);
+        spawnHerbivore(countHerbivore, map);
+        spawnPredator(countPredator, map);
+        spawnTree(countTree, map);
 
-        List<Coordinates> availableCoordinates = generateAllCoordinates(width, height);
-        Collections.shuffle(availableCoordinates, random);
-
-        int index = 0;
-
-        for (int i = 0; i < predatorCount; i++)
-            map.addEntity(availableCoordinates.get(index++), createRandomPredator());
-
-        for (int i = 0; i < herbivoreCount; i++)
-            map.addEntity(availableCoordinates.get(index++), createRandomHerbivore());
-
-        for (int i = 0; i < grassCount; i++)
-            map.addEntity(availableCoordinates.get(index++), new Grass());
-
-        for (int i = 0; i < rockCount; i++)
-            map.addEntity(availableCoordinates.get(index++), new Rock());
-
-        for (int i = 0; i < treeCount; i++)
-            map.addEntity(availableCoordinates.get(index++), new Tree());
     }
 
+    private Coordinates createRandomCoordinates(GameMap map) {
+        while (true) {
+            Coordinates coordinates = new Coordinates(
+                    random.nextInt(0, map.getHeight()),
+                    random.nextInt(0, map.getWidth()));
 
-    private List<Coordinates> generateAllCoordinates(int width, int height) {
-        List<Coordinates> coordinates = new ArrayList<>();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                coordinates.add(new Coordinates(y, x));
+            if (map.isCellEmpty(coordinates)) {
+                return coordinates;
             }
         }
-        return coordinates;
     }
 
-    private Predator createRandomPredator() {
-        Health health = new Health(randomInRange(PREDATOR_MIN_HEALTH, PREDATOR_MAX_HEALTH));
-        Speed speed = new Speed(randomInRange(PREDATOR_MIN_SPEED, PREDATOR_MAX_SPEED));
-        AttackPower attackPower = new AttackPower(randomInRange(PREDATOR_MIN_ATTACK, PREDATOR_MAX_ATTACK));
-        return new Predator(health, speed, attackPower);
+    private void spawnGrass(int count, GameMap map) {
+        for (int i = 0; i < count; i++) {
+            map.addEntity(createRandomCoordinates(map), new Grass());
+        }
     }
 
-    private Herbivore createRandomHerbivore() {
-        Health health = new Health(randomInRange(HERBIVORE_MIN_HEALTH, HERBIVORE_MAX_HEALTH));
-        Speed speed = new Speed(randomInRange(HERBIVORE_MIN_SPEED, HERBIVORE_MAX_SPEED));
-        return new Herbivore(health, speed);
+    private void spawnRock(int count, GameMap map) {
+        for (int i = 0; i < count; i++) {
+            map.addEntity(createRandomCoordinates(map), new Rock());
+        }
     }
 
-    private int randomInRange(int min, int max) {
-        return random.nextInt(max - min + 1) + min;
+    private void spawnTree(int count, GameMap map) {
+        for (int i = 0; i < count; i++) {
+            map.addEntity(createRandomCoordinates(map), new Tree());
+        }
     }
+
+    private void spawnPredator(int count, GameMap map) {
+        for (int i = 0; i < count; i++) {
+            map.addEntity(createRandomCoordinates(map), new Predator(
+                    new Health(1),
+                    new Speed(1),
+                    new AttackPower(random.nextInt(MIN_POWER_PREDATOR, MAX_POWER_PREDATOR))
+            ));
+        }
+    }
+
+    private void spawnHerbivore(int count, GameMap map) {
+        for (int i = 0; i < count; i++) {
+            map.addEntity(createRandomCoordinates(map), new Herbivore(
+                    new Health(random.nextInt(MIN_HEALTH_HERBIVORE, MAX_HEALTH_HERBIVORE)),
+                    new Speed(random.nextInt(MIN_SPEED_HERBIVORE, MAX_SPEED_HERBIVORE))
+            ));
+        }
+    }
+
+
 }

@@ -7,8 +7,4 @@ public record Health(int value) {
         }
     }
 
-    public boolean isAlive() {
-        return value > 0;
-    }
-
 }

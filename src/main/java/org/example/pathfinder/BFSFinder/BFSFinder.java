@@ -10,15 +10,6 @@ import java.util.*;
 
 public class BFSFinder implements PathFinder {
 
-    private List<Coordinates> getNeighbours(Coordinates start) {
-        return List.of(
-                new Coordinates(start.y(), start.x() + 1),
-                new Coordinates(start.y(), Math.max(start.x() - 1, 0)),
-                new Coordinates(start.y() + 1, start.x()),
-                new Coordinates(Math.max(start.y() - 1, 0), start.x())
-        );
-    }
-
     @Override
     public List<Coordinates> findPath(
             GameMap map,
@@ -65,6 +56,15 @@ public class BFSFinder implements PathFinder {
         }
 
         return reconstructPath(parents, from, targetCoordinates);
+    }
+
+    private List<Coordinates> getNeighbours(Coordinates start) {
+        return List.of(
+                new Coordinates(start.y(), start.x() + 1),
+                new Coordinates(start.y(), Math.max(start.x() - 1, 0)),
+                new Coordinates(start.y() + 1, start.x()),
+                new Coordinates(Math.max(start.y() - 1, 0), start.x())
+        );
     }
 
 
