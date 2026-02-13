@@ -1,14 +1,13 @@
-package org.example.renderer.Impl;
+package org.example.renderer;
 
 import org.example.entity.Entity;
 import org.example.map.GameMap;
-import org.example.renderer.RendererInterface;
 import org.example.valueobjects.Coordinates;
 
 import java.util.Optional;
 
-public class CliRendererImpl implements RendererInterface {
-    private final String EMPTY_CELL = "⬜";
+public class ConsoleRenderer implements Renderer {
+    private static final String EMPTY_CELL = "⬜";
 
     @Override
     public void render(GameMap map) {
@@ -18,7 +17,7 @@ public class CliRendererImpl implements RendererInterface {
             StringBuilder line = new StringBuilder();
             for (int x = 0; x < map.getWidth(); x++) {
 
-                Coordinates coordinates = new Coordinates(y, x);
+                Coordinates coordinates = new Coordinates(x, y);
                 Optional<Entity> entity = map.getEntity(coordinates);
 
                 if (entity.isPresent()) {
@@ -26,10 +25,10 @@ public class CliRendererImpl implements RendererInterface {
                 } else {
                     line.append(EMPTY_CELL);
                 }
+                line.append(" ");
             }
             System.out.println(line);
         }
-        System.out.println("\n\n\n");
     }
 
 

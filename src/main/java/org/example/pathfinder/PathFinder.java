@@ -1,6 +1,5 @@
 package org.example.pathfinder;
 
-import org.example.creature.Creature;
 import org.example.entity.Entity;
 import org.example.map.GameMap;
 import org.example.valueobjects.Coordinates;

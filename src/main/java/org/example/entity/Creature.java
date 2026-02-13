@@ -1,7 +1,5 @@
-package org.example.creature;
+package org.example.entity;
 
-import org.example.entity.Entity;
-import org.example.entity.Grass;
 import org.example.map.GameMap;
 import org.example.pathfinder.PathFinder;
 import org.example.valueobjects.Coordinates;
@@ -20,7 +18,6 @@ abstract public class Creature extends Entity {
         this.speed = speed;
     }
 
-    // TODO ocp princip
     public abstract Class<? extends Entity> getTargetClass();
 
     public void makeMove(GameMap gameMap, PathFinder pathFinder) {

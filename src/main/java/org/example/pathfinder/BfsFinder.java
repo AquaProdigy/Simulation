@@ -1,14 +1,12 @@
-package org.example.pathfinder.BFSFinder;
+package org.example.pathfinder;
 
-import org.example.creature.Creature;
 import org.example.entity.Entity;
 import org.example.map.GameMap;
-import org.example.pathfinder.PathFinder;
 import org.example.valueobjects.Coordinates;
 
 import java.util.*;
 
-public class BFSFinder implements PathFinder {
+public class BfsFinder implements PathFinder {
 
     @Override
     public List<Coordinates> findPath(
@@ -40,7 +38,6 @@ public class BFSFinder implements PathFinder {
 
                 Optional<Entity> neighbourEntity = map.getEntity(neighbour);
                 if (neighbourEntity.isPresent() &&
-                        !(neighbourEntity.get() instanceof Creature) &&
                         !target.isInstance(neighbourEntity.get())) {
                     continue;
                 }
@@ -60,10 +57,10 @@ public class BFSFinder implements PathFinder {
 
     private List<Coordinates> getNeighbours(Coordinates start) {
         return List.of(
-                new Coordinates(start.y(), start.x() + 1),
-                new Coordinates(start.y(), Math.max(start.x() - 1, 0)),
-                new Coordinates(start.y() + 1, start.x()),
-                new Coordinates(Math.max(start.y() - 1, 0), start.x())
+                new Coordinates(start.x(), start.y() + 1),
+                new Coordinates(start.x(), Math.max(start.y() - 1, 0)),
+                new Coordinates(start.x() + 1, start.y()),
+                new Coordinates(Math.max(start.x() - 1, 0), start.y())
         );
     }
 

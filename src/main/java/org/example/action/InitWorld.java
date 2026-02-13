@@ -1,7 +1,7 @@
-package org.example.actions;
+package org.example.action;
 
-import org.example.creature.Herbivore;
-import org.example.creature.Predator;
+import org.example.entity.Herbivore;
+import org.example.entity.Predator;
 import org.example.entity.Grass;
 import org.example.entity.Rock;
 import org.example.entity.Tree;
@@ -11,12 +11,9 @@ import org.example.valueobjects.Coordinates;
 import org.example.valueobjects.Health;
 import org.example.valueobjects.Speed;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
-public class InitWorld implements Actions {
+public class InitWorld implements Action {
     final Integer MAX_HEALTH_HERBIVORE = 80;
     final Integer MIN_HEALTH_HERBIVORE = 20;
     final Integer MAX_SPEED_HERBIVORE = 2;
@@ -41,7 +38,6 @@ public class InitWorld implements Actions {
         int countHerbivore = (int) countCellForSpawn * 20 / 100;
         int countPredator = (int) countCellForSpawn * 5 / 100;
 
-
         spawnGrass(countGrass, map);
         spawnRock(countRock, map);
         spawnHerbivore(countHerbivore, map);
@@ -53,8 +49,8 @@ public class InitWorld implements Actions {
     private Coordinates createRandomCoordinates(GameMap map) {
         while (true) {
             Coordinates coordinates = new Coordinates(
-                    random.nextInt(0, map.getHeight()),
-                    random.nextInt(0, map.getWidth()));
+                    random.nextInt(0, map.getWidth()),
+                    random.nextInt(0, map.getHeight()));
 
             if (map.isCellEmpty(coordinates)) {
                 return coordinates;

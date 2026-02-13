@@ -1,23 +1,24 @@
 package org.example;
 
-import org.example.actions.InitWorld;
-import org.example.actions.TurnAction;
+import org.example.action.InitWorld;
+import org.example.action.MoveCreatures;
 import org.example.map.GameMap;
-import org.example.pathfinder.BFSFinder.BFSFinder;
+import org.example.pathfinder.BfsFinder;
 import org.example.pathfinder.PathFinder;
-import org.example.renderer.Impl.CliRendererImpl;
-import org.example.renderer.RendererInterface;
+import org.example.renderer.ConsoleRenderer;
+import org.example.renderer.Renderer;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    static void main(String[] args) throws InterruptedException {
         GameMap map = new GameMap(15, 15);
-        RendererInterface render = new CliRendererImpl();
+        Renderer render = new ConsoleRenderer();
         InitWorld initWorld = new InitWorld();
-        PathFinder pathFinder = new BFSFinder();
-        TurnAction turnAction = new TurnAction();
+        PathFinder pathFinder = new BfsFinder();
+        MoveCreatures moveCreatures = new MoveCreatures(pathFinder);
 
-        Simulation simulation = new Simulation(map, render, initWorld, turnAction, pathFinder);
-        simulation.startSimulation();
+        Simulation simulation = new Simulation(map, render, initWorld, moveCreatures);
+        DialogSimulation dialogSimulation = new DialogSimulation(simulation);
 
+        dialogSimulation.run();
     }
 }

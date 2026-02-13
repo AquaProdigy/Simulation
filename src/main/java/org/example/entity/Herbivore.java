@@ -1,15 +1,10 @@
-package org.example.creature;
+package org.example.entity;
 
-import org.example.entity.Entity;
-import org.example.entity.Grass;
 import org.example.map.GameMap;
-import org.example.pathfinder.PathFinder;
-import org.example.valueobjects.AttackPower;
 import org.example.valueobjects.Coordinates;
 import org.example.valueobjects.Health;
 import org.example.valueobjects.Speed;
 
-import java.util.List;
 import java.util.Optional;
 
 public class Herbivore extends Creature {

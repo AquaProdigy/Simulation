@@ -2,6 +2,6 @@ package org.example.renderer;
 
 import org.example.map.GameMap;
 
-public interface RendererInterface {
+public interface Renderer {
     void render(GameMap map);
 }
