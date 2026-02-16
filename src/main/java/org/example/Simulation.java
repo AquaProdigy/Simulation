@@ -7,6 +7,10 @@ import org.example.renderer.Renderer;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Возможны проблемы с синхронизацией из-за не полной картины о многопоточке
+ * Смотрел пару вводных уроков
+ */
 public class Simulation {
     private volatile boolean running = false;
     private volatile boolean paused = false;

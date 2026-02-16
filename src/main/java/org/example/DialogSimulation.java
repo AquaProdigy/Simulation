@@ -39,6 +39,11 @@ public class DialogSimulation {
         System.out.println(menu);
     }
 
+
+    /**
+     * Можно и правильнее возможно использовать отдельный класс "SimulationRunner"
+     * где будет использоваться executeService - готов к критике
+     */
     private void selectAction(String action) {
         switch (action) {
             case PAUSE -> {

@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 abstract public class Creature extends Entity {
+    /**
+     * Можно убрать рекорды и заменить на примитивы чтобы не забивать память
+     * Но это минус к расширяемости
+     */
     protected Health health;
     protected Speed speed;
 
