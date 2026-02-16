@@ -5,6 +5,8 @@ import org.example.action.MoveCreatures;
 import org.example.map.GameMap;
 import org.example.renderer.Renderer;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Simulation {
     private volatile boolean running = false;
     private volatile boolean paused = false;
@@ -15,8 +17,9 @@ public class Simulation {
     private final InitWorld initWorld;
     private final MoveCreatures moveCreatures;
 
-    private int steps = 0;
-    private static final int sleep = 1000;
+    private static final int SLEEP = 1000;
+
+    private final AtomicInteger steps = new AtomicInteger(0);
 
     public Simulation(GameMap gameMap, Renderer renderer, InitWorld initWorld, MoveCreatures moveCreatures) {
         this.gameMap = gameMap;
@@ -42,8 +45,14 @@ public class Simulation {
         while (running) {
             if (!paused) {
                 nextTurn();
-                takeStep();
                 sleepSimulation();
+            } else {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
             }
         }
     }
@@ -56,24 +65,24 @@ public class Simulation {
         paused = false;
     }
 
-    public void finishSimulation() {
+    public synchronized void finishSimulation() {
         running = false;
         paused = false;
         initialized = false;
-        steps = 0;
+        steps.set(0);
 
         gameMap.clearMap();
     }
 
     public int getSteps() {
-        return steps;
+        return steps.get();
     }
 
     private void takeStep() {
-        steps++;
+        steps.addAndGet(1);
     }
 
-    private void initializationWorld() {
+    private synchronized void initializationWorld() {
         if (!initialized) {
             initWorld.execute(gameMap);
             running = true;
@@ -83,9 +92,9 @@ public class Simulation {
 
     private void sleepSimulation() {
         try {
-            Thread.sleep(sleep);
+            Thread.sleep(SLEEP);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

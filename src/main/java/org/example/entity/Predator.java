@@ -19,8 +19,12 @@ public class Predator extends Creature {
     @Override
     public void attack(GameMap gameMap, Coordinates targetCoordinates) {
         Optional<Entity> targetEntity = gameMap.getEntity(targetCoordinates);
-        if (targetEntity.isEmpty()) return;
-        if (!this.getTargetClass().equals(targetEntity.get().getClass())) return;
+        if (targetEntity.isEmpty()) {
+            return;
+        }
+        if (!this.getTargetClass().equals(targetEntity.get().getClass())) {
+            return;
+        }
 
         Herbivore target = (Herbivore) targetEntity.get();
 

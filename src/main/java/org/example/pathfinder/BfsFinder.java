@@ -33,8 +33,12 @@ public class BfsFinder implements PathFinder {
             }
 
             for (Coordinates neighbour : getNeighbours(current)) {
-                if (!map.isCoordinatesInBounds(neighbour)) continue;
-                if (visited.contains(neighbour)) continue;
+                if (!map.isCoordinatesInBounds(neighbour)) {
+                    continue;
+                }
+                if (visited.contains(neighbour)) {
+                    continue;
+                }
 
                 Optional<Entity> neighbourEntity = map.getEntity(neighbour);
                 if (neighbourEntity.isPresent() &&

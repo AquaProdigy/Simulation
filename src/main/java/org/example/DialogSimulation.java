@@ -56,8 +56,12 @@ public class DialogSimulation {
                 System.out.println("Simulation finished\n");
                 printMenu();
             }
+            case START_SIMULATION -> {
+                Thread thread = new Thread(simulation::startSimulation, "simulation-thread");
+                thread.setDaemon(true);
+                thread.start();
+            }
 
-            case START_SIMULATION -> new Thread(simulation::startSimulation).start();
             case CONTINUE_SIMULATION -> simulation.continueSimulation();
             case EXIT -> System.exit(0);
             default -> System.out.println("Invalid action");

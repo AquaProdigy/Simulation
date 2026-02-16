@@ -9,7 +9,7 @@ import org.example.renderer.ConsoleRenderer;
 import org.example.renderer.Renderer;
 
 public class Main {
-    static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         GameMap map = new GameMap(15, 15);
         Renderer render = new ConsoleRenderer();
         InitWorld initWorld = new InitWorld();

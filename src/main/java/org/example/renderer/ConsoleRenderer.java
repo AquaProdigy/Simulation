@@ -1,6 +1,6 @@
 package org.example.renderer;
 
-import org.example.entity.Entity;
+import org.example.entity.*;
 import org.example.map.GameMap;
 import org.example.valueobjects.Coordinates;
 
@@ -33,12 +33,12 @@ public class ConsoleRenderer implements Renderer {
 
 
     private String selectSpriteEntity(Entity entity) {
-        return switch (entity.getClass().getSimpleName()) {
-            case "Grass" -> "\uD83C\uDF3F";
-            case "Rock" -> "\uD83E\uDEA8";
-            case "Tree" -> "\uD83C\uDF33";
-            case "Herbivore" -> "\uD83D\uDC04";
-            case "Predator" -> "\uD83D\uDC05";
+        return switch (entity) {
+            case Grass g -> "\uD83C\uDF3F";
+            case Rock r -> "\uD83E\uDEA8";
+            case Tree t -> "\uD83C\uDF33";
+            case Herbivore h -> "\uD83D\uDC04";
+            case Predator p -> "\uD83D\uDC05";
             default -> EMPTY_CELL;
         };
     }
